@@ -1,9 +1,12 @@
 package data
 
 import (
+	"errors"
 	"fmt"
 	"time"
 )
+
+var ErrBlankName = errors.New("blank name")
 
 // Product defines the structure for an API product
 type Product struct {
@@ -11,7 +14,6 @@ type Product struct {
 	Name        string  `json:"name"`
 	Description string  `json:"description"`
 	Price       float32 `json:"price"`
-	SKU         string  `json:"sku"`
 	CreatedOn   string  `json:"-"`
 	UpdatedOn   string  `json:"-"`
 	DeletedOn   string  `json:"-"`
@@ -23,18 +25,18 @@ var productList = []*Product{
 		Name:        "Latte",
 		Description: "Frothy milky coffee",
 		Price:       2.45,
-		SKU:         "abc323",
-		CreatedOn:   time.Now().UTC().String(),
-		UpdatedOn:   time.Now().UTC().String(),
+		// SKU:         "abc323",
+		CreatedOn: time.Now().UTC().String(),
+		UpdatedOn: time.Now().UTC().String(),
 	},
 	{
 		ID:          2,
 		Name:        "Espresso",
 		Description: "Short and strong coffee without milk",
 		Price:       1.99,
-		SKU:         "fjd34",
-		CreatedOn:   time.Now().UTC().String(),
-		UpdatedOn:   time.Now().UTC().String(),
+		// SKU:         "fjd34",
+		CreatedOn: time.Now().UTC().String(),
+		UpdatedOn: time.Now().UTC().String(),
 	},
 }
 
@@ -49,6 +51,7 @@ func GetProducts() Products {
 func AddProduct(p *Product) {
 	p.ID = getNextID()
 	productList = append(productList, p)
+
 }
 
 func UpdateProduct(id int, p *Product) error {
@@ -62,6 +65,22 @@ func UpdateProduct(id int, p *Product) error {
 
 	return nil
 }
+
+func (p *Product) Validate() error {
+	if p.Name == "" {
+		return ErrBlankName
+	}
+
+	return nil
+}
+
+// func validateSKU(fl validator.FieldLevel) bool {
+// 	// sku is of format abc-absd-dfsdf
+// 	re := regexp.MustCompile(`[a-z]+-[a-z]+-[a-z]+`)
+// 	matches := re.FindAllString(fl.Field().String(), -1)
+
+// 	return len(matches) == 1
+// }
 
 var ErrProductNotFound = fmt.Errorf("Product not found")
 

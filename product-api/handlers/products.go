@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -9,10 +11,11 @@ import (
 )
 
 type Products struct {
+	l *log.Logger
 }
 
-func NewProducts() *Products {
-	return &Products{}
+func NewProducts(l *log.Logger) *Products {
+	return &Products{l}
 }
 
 func (p *Products) GetProducts(c *gin.Context) {
@@ -21,12 +24,12 @@ func (p *Products) GetProducts(c *gin.Context) {
 }
 
 func (p *Products) AddProduct(c *gin.Context) {
-	var prod *data.Product
+	prod, _ := c.Get("product")
+	//Type assertion
+	var pr data.Product = prod.(data.Product)
 
-	if err := c.BindJSON(&prod); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-	}
-	data.AddProduct(prod)
+	c.String(http.StatusOK, "Added new product")
+	data.AddProduct(&pr)
 }
 
 func (p *Products) UpdateProduct(c *gin.Context) {
@@ -52,5 +55,35 @@ func (p *Products) UpdateProduct(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Product not found"})
 		return
+	}
+}
+
+type KeyProduct struct{}
+
+func (p Products) MiddlewareValidateProduct() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		prod := data.Product{}
+		fmt.Println(111111)
+
+		err := c.BindJSON(&prod)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Error reading produc"})
+			return
+		}
+		fmt.Println(222222)
+
+		// validate the product
+		err = prod.Validate()
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Validation Error"})
+			return
+		}
+
+		fmt.Println(33333)
+
+		// add the product to the context
+		c.Set("product", prod)
+		// Call the next handler, which can be another middleware in the chain, or the final handler.
+		c.Next()
 	}
 }
