@@ -20,9 +20,13 @@ func main() {
 	l.SetFlags(log.LstdFlags | log.Lshortfile)
 	prods := handlers.NewProducts(l)
 
-	r.GET("/", prods.GetProducts)
-	r.Use(prods.MiddlewareValidateProduct()).POST("/", prods.AddProduct)
-	r.Use(prods.MiddlewareValidateProduct()).PUT("/:id", prods.UpdateProduct)
+	r.GET("/products", prods.ListAll)
+	r.GET("/products/:id", prods.ListSingle)
+	r.DELETE("/products/:id", prods.Delete)
+
+	r.POST("/products", prods.Create).Use(prods.MiddlewareValidateProduct())
+
+	r.PUT("/products", prods.Update).Use(prods.MiddlewareValidateProduct())
 
 	srv := &http.Server{
 		Addr:    ":4000",
