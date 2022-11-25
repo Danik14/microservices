@@ -10,6 +10,7 @@ func main() {
 	prods := handlers.NewProducts()
 
 	r.GET("/", prods.GetProducts)
+	r.POST("/", prods.AddProduct)
 
 	r.Run(":4000")
 }

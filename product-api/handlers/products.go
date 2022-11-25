@@ -18,3 +18,12 @@ func (p *Products) GetProducts(c *gin.Context) {
 	prods := data.GetProducts()
 	c.JSON(http.StatusFound, prods)
 }
+
+func (p *Products) AddProduct(c *gin.Context) {
+	var prod *data.Product
+
+	if err := c.BindJSON(&prod); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
+	data.AddProduct(prod)
+}
