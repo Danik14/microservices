@@ -13,6 +13,7 @@ import (
 	"github.com/Danik14/microservices/data"
 	"github.com/Danik14/microservices/handlers"
 	"github.com/gin-gonic/gin"
+	"github.com/go-openapi/runtime/middleware"
 )
 
 func main() {
@@ -22,17 +23,31 @@ func main() {
 	v := data.NewValidation()
 	prods := handlers.NewProducts(l, v)
 
-	r.GET("/products", prods.ListAll)
-	r.GET("/products/:id", prods.ListSingle)
-	r.DELETE("/products/:id", prods.Delete)
+	//specifying middleware for documentation
+	opts := middleware.RedocOpts{SpecURL: "/swagger.yaml"}
+	sh := middleware.Redoc(opts, nil)
 
-	r.Use(prods.MiddlewareValidateProduct())
+	rg1 := r.Group("/products")
+	rg2 := r.Group("/")
+	rg3 := r.Group("/products")
 
-	r.POST("/products", prods.Create)
-	r.PUT("/products", prods.Update)
+	rg1.GET("", prods.ListAll)
+	rg1.GET("/:id", prods.ListSingle)
+
+	rg2.GET("docs", gin.WrapH(sh))
+	rg2.StaticFile("swagger.yaml", "./swagger.yaml")
+
+	rg1.DELETE("/:id", prods.Delete)
+
+	rg3.Use(prods.MiddlewareValidateProduct())
+
+	rg3.POST("", prods.Create)
+	rg3.PUT("", prods.Update)
+
 	srv := &http.Server{
-		Addr:    ":4000",
-		Handler: r,
+		Addr:     ":4000",
+		Handler:  r,
+		ErrorLog: l,
 	}
 
 	// Initializing the server in a goroutine so that
