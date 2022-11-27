@@ -1,11 +1,8 @@
 package data
 
 import (
-	"errors"
 	"fmt"
 )
-
-var ErrBlankName = errors.New("blank name")
 
 // Product defines the structure for an API product
 type Product struct {
@@ -101,22 +98,6 @@ func UpdateProduct(p Product) error {
 	return nil
 }
 
-func (p *Product) Validate() error {
-	if p.Name == "" {
-		return ErrBlankName
-	}
-
-	return nil
-}
-
-// func validateSKU(fl validator.FieldLevel) bool {
-// 	// sku is of format abc-absd-dfsdf
-// 	re := regexp.MustCompile(`[a-z]+-[a-z]+-[a-z]+`)
-// 	matches := re.FindAllString(fl.Field().String(), -1)
-
-// 	return len(matches) == 1
-// }
-
 var ErrProductNotFound = fmt.Errorf("Product not found")
 
 // func findProduct(id int) (*Product, int, error) {
@@ -152,8 +133,3 @@ func findIndexByProductID(id int) int {
 
 	return -1
 }
-
-// func getNextID() int {
-// 	lp := productList[len(productList)-1]
-// 	return lp.ID + 1
-// }

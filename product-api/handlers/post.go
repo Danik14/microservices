@@ -7,15 +7,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// // swagger:route POST /products products createProduct
-// // Create a new product
-// //
-// // responses:
-// //	200: productResponse
-// //  422: errorValidation
-// //  501: errorResponse
+// swagger:route POST /products products createProduct
+// Create a new product
+//
+// responses:
+//	200: productResponse
+//  422: errorValidation
+//  501: errorResponse
 
-// // Create handles POST requests to add new products
+// Create handles POST requests to add new products
 func (p *Products) Create(c *gin.Context) {
 	prod, _ := c.Get("product")
 	//Type assertion

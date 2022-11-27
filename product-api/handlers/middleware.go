@@ -24,8 +24,7 @@ func (p *Products) MiddlewareValidateProduct() gin.HandlerFunc {
 		fmt.Println(prod, *prod)
 
 		// validate the product
-		v := data.NewValidation()
-		errs := v.Validate(prod)
+		errs := p.v.Validate(prod)
 		if len(errs) != 0 {
 			p.l.Println("Error Validating product")
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Validation Error", "Messages": errs.Errors()})

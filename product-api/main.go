@@ -10,6 +10,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/Danik14/microservices/data"
 	"github.com/Danik14/microservices/handlers"
 	"github.com/gin-gonic/gin"
 )
@@ -18,7 +19,8 @@ func main() {
 	r := gin.Default()
 	l := log.New(os.Stdout, "products-api ", log.LstdFlags)
 	l.SetFlags(log.LstdFlags | log.Lshortfile)
-	prods := handlers.NewProducts(l)
+	v := data.NewValidation()
+	prods := handlers.NewProducts(l, v)
 
 	r.GET("/products", prods.ListAll)
 	r.GET("/products/:id", prods.ListSingle)

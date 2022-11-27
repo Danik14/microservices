@@ -7,21 +7,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// import (
-// 	"net/http"
+// swagger:route PUT /products products updateProduct
+// Update a products details
+//
+// responses:
+//	201: noContentResponse
+//  404: errorResponse
+//  422: errorValidation
 
-// 	"github.com/nicholasjackson/building-microservices-youtube/product-api/data"
-// )
-
-// // swagger:route PUT /products products updateProduct
-// // Update a products details
-// //
-// // responses:
-// //	201: noContentResponse
-// //  404: errorResponse
-// //  422: errorValidation
-
-// // Update handles PUT requests to update products
+// Update handles PUT requests to update products
 func (p *Products) Update(c *gin.Context) {
 	prod, _ := c.Get("product")
 	//Type assertion
