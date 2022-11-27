@@ -19,8 +19,8 @@ import (
 func (p *Products) Create(c *gin.Context) {
 	prod, _ := c.Get("product")
 	//Type assertion
-	var pr data.Product = prod.(data.Product)
+	var pr *data.Product = prod.(*data.Product)
 
 	c.String(http.StatusOK, "Added new product")
-	data.AddProduct(pr)
+	data.AddProduct(*pr)
 }

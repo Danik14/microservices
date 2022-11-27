@@ -35,7 +35,7 @@ func (p *Products) MiddlewareValidateProduct() gin.HandlerFunc {
 		fmt.Println(33333)
 
 		// add the product to the context
-		c.Set("product", *prod)
+		c.Set("product", prod)
 
 		// Call the next handler, which can be another middleware in the chain,
 		//or the final handler.
