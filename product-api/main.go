@@ -24,10 +24,10 @@ func main() {
 	r.GET("/products/:id", prods.ListSingle)
 	r.DELETE("/products/:id", prods.Delete)
 
-	r.POST("/products", prods.Create).Use(prods.MiddlewareValidateProduct())
+	r.Use(prods.MiddlewareValidateProduct())
 
-	r.PUT("/products", prods.Update).Use(prods.MiddlewareValidateProduct())
-
+	r.POST("/products", prods.Create)
+	r.PUT("/products", prods.Update)
 	srv := &http.Server{
 		Addr:    ":4000",
 		Handler: r,
