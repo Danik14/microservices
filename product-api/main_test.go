@@ -24,5 +24,8 @@ func TestGetProducts(t *testing.T) {
 
 	//printing result
 	fmt.Printf("%#v", prod.GetPayload())
-	// t.Fail()
+
+	//	It does not print result
+	//	without this line
+	t.Fail()
 }
