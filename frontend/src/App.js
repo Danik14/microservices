@@ -2,9 +2,11 @@ import "./App.css";
 import axios from "axios";
 import { useEffect } from "react";
 
+//(☞ ͡° ͜ʖ ͡°)☞
+
 function App() {
-  const getProducts = () => {
-    axios
+  const getProducts = async () => {
+    await axios
       .get("http://localhost:4000/products")
       .then((p) => console.log(p))
       .catch((err) => console.log(err));

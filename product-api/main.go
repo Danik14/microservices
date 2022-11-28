@@ -12,12 +12,27 @@ import (
 
 	"github.com/Danik14/microservices/data"
 	"github.com/Danik14/microservices/handlers"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/go-openapi/runtime/middleware"
 )
 
 func main() {
 	r := gin.Default()
+
+	// CORS for http://localhost:3000 allowing:
+	// - PUT and PATCH methods
+	// - Origin header
+	// - Credentials share
+	// - Preflight requests cached for 1 hour
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:3000"},
+		AllowMethods:     []string{"GET"},
+		AllowHeaders:     []string{"Origin"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
 
 	//specifying logger parameters
 	l := log.New(os.Stdout, "products-api ", log.LstdFlags)
