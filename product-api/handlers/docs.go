@@ -1,24 +1,26 @@
-// Package classification of Product API
-//
-// Documentation for Product API
-//
-//	Schemes: http
-//	BasePath: /
-//	Version: 1.0.0
-//
-//	Consumes:
-//	- application/json
-//
-//	Produces:
-//	- application/json
-//
-// swagger:meta
+/*
+Documentation of Microservice API
 
+	Schemes:
+		http
+	Host: localhost
+
+	BasePath: /
+
+	Version: 1.0.0
+
+	Consumes:
+	- application/json
+
+	Produces:
+	- application/json
+
+swagger:meta
+*/
 package handlers
 
 import "github.com/Danik14/microservices/data"
 
-//
 // NOTE: Types defined here are purely for documentation purposes
 // these types are not used by any of the handers
 
@@ -68,7 +70,7 @@ type productParamsWrapper struct {
 	Body data.Product
 }
 
-// swagger:parameters updateProduct
+// swagger:parameters listSingleProduct deleteProduct
 type productIDParamsWrapper struct {
 	// The id of the product for which the operation relates
 	// in: path

@@ -8,13 +8,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// swagger:route DELETE /products/{id} products deleteProduct
-// Update a products details
-//
-// responses:
-//	201: noContentResponse
-//  404: errorResponse
-//  501: errorResponse
+/*
+ swagger:route DELETE /products/{id} products deleteProduct
+Update a products details
+
+responses:
+	201: noContentResponse
+	400: errorResponse
+ 	404: errorResponse
+	500: errorResponse
+*/
 
 // Delete handles DELETE requests and removes items from the database
 func (p *Products) Delete(c *gin.Context) {
@@ -39,5 +42,5 @@ func (p *Products) Delete(c *gin.Context) {
 		return
 	}
 
-	c.String(http.StatusOK, "Successfuly Deleted Product")
+	c.String(http.StatusCreated, "Successfuly Deleted Product")
 }

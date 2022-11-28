@@ -18,7 +18,7 @@ func (p *Products) MiddlewareValidateProduct() gin.HandlerFunc {
 		err := c.BindJSON(&prod)
 		if err != nil {
 			p.l.Println("Error reading produc")
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Error reading produc"})
+			c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{"error": "Error reading produc"})
 			return
 		}
 		fmt.Println(prod, *prod)
@@ -27,7 +27,7 @@ func (p *Products) MiddlewareValidateProduct() gin.HandlerFunc {
 		errs := p.v.Validate(prod)
 		if len(errs) != 0 {
 			p.l.Println("Error Validating product")
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Validation Error", "Messages": errs.Errors()})
+			c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{"error": "Validation Error", "Messages": errs.Errors()})
 			return
 		}
 

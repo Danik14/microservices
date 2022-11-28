@@ -18,15 +18,22 @@ import (
 
 func main() {
 	r := gin.Default()
+
+	//specifying logger parameters
 	l := log.New(os.Stdout, "products-api ", log.LstdFlags)
 	l.SetFlags(log.LstdFlags | log.Lshortfile)
+
+	//creating new validator object
 	v := data.NewValidation()
+
 	prods := handlers.NewProducts(l, v)
 
 	//specifying middleware for documentation
 	opts := middleware.RedocOpts{SpecURL: "/swagger.yaml"}
 	sh := middleware.Redoc(opts, nil)
 
+	//dividing router into groups for wrapping middleware
+	//and separating responsibilities
 	rg1 := r.Group("/products")
 	rg2 := r.Group("/")
 	rg3 := r.Group("/products")

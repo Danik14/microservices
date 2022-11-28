@@ -14,6 +14,7 @@ import (
 //	201: noContentResponse
 //  404: errorResponse
 //  422: errorValidation
+//	500: errorResponse
 
 // Update handles PUT requests to update products
 func (p *Products) Update(c *gin.Context) {
@@ -31,4 +32,6 @@ func (p *Products) Update(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Product not found"})
 		return
 	}
+
+	c.String(http.StatusCreated, "Successfuly Updated Product")
 }
