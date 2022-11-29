@@ -31,8 +31,7 @@ func main() {
 	f := handlers.NewFiles(l)
 
 	router.POST("/images/:id/:filename", f.SaveFile)
+	router.GET("/images/:filename", f.ServeFile)
 	router.Run(":8080")
-
-	// create a new serve mux and register the handlers
 
 }
