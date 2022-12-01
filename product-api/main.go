@@ -10,11 +10,13 @@ import (
 	"syscall"
 	"time"
 
+	protos "github.com/Danik14/microservices/currency/currency"
 	"github.com/Danik14/microservices/data"
 	"github.com/Danik14/microservices/handlers"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/go-openapi/runtime/middleware"
+	"google.golang.org/grpc"
 )
 
 func main() {
@@ -41,7 +43,16 @@ func main() {
 	//creating new validator object
 	v := data.NewValidation()
 
-	prods := handlers.NewProducts(l, v)
+	conn, err := grpc.Dial("localhost:9092")
+	if err != nil {
+		panic(err)
+	}
+	defer conn.Close()
+
+	// creating currency client
+	cc := protos.NewCurrencyClient(conn)
+
+	prods := handlers.NewProducts(l, v, cc)
 
 	//specifying middleware for documentation
 	opts := middleware.RedocOpts{SpecURL: "/swagger.yaml"}
