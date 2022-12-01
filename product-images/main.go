@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/Danik14/microservices/product-images/handlers"
+	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
 	"github.com/hashicorp/go-hclog"
 )
@@ -38,6 +39,8 @@ func main() {
 	// }
 
 	f := handlers.NewFiles(l)
+
+	router.Use(gzip.Gzip(gzip.DefaultCompression))
 
 	router.POST("/images/:id/:filename", f.SaveFile)
 	router.GET("/images/:id/:filename", f.ServeFile)
