@@ -43,9 +43,12 @@ func main() {
 	router.GET("/images/:id/:filename", f.ServeFile)
 
 	srv := &http.Server{
-		Addr:     ":8080",
-		Handler:  router,
-		ErrorLog: sl,
+		Addr:         ":8080",
+		Handler:      router,
+		ErrorLog:     sl,
+		ReadTimeout:  5 * time.Second,   // max time to read request from the client
+		WriteTimeout: 10 * time.Second,  // max time to write response to the client
+		IdleTimeout:  120 * time.Second, // max time for connections using TCP Keep-Alive
 	}
 
 	// Initializing the server in a goroutine so that
