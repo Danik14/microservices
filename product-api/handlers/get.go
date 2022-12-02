@@ -1,11 +1,13 @@
 package handlers
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"net/http"
 	"strconv"
 
+	protos "github.com/Danik14/microservices/currency/currency"
 	"github.com/Danik14/microservices/data"
 	"github.com/gin-gonic/gin"
 )
@@ -48,6 +50,21 @@ func (p *Products) ListSingle(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Product Not Found"})
 		return
 	}
+
+	rate := &protos.RateRequest{
+		Base:        protos.Currencies_name[protos.Currencies_value["EUR"]],
+		Destination: protos.Currencies_name[protos.Currencies_value["GBP"]],
+	}
+
+	resp, err := p.cc.GetRate(context.Background(), rate)
+	if err != nil {
+		p.l.Println("[Error] error getting new rate", err)
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"Error": "Error getting exchange rate"})
+		return
+	}
+
+	p.l.Printf("Resp %#v", resp)
+	// prod.Price = prod.Price * resp.Rate
 
 	c.JSON(http.StatusFound, prod)
 }

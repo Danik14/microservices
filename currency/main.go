@@ -28,6 +28,8 @@ func main() {
 	// for this gRPC service
 	reflection.Register(gs)
 
+	fmt.Println("Listening on port:", "9092")
+
 	// create a TCP socket for inbound server connections
 	l, err := net.Listen("tcp", fmt.Sprintf(":%d", 9092))
 	if err != nil {
