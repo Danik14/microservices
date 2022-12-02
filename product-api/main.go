@@ -78,9 +78,12 @@ func main() {
 	rg3.PUT("", prods.Update)
 
 	srv := &http.Server{
-		Addr:     ":4000",
-		Handler:  r,
-		ErrorLog: l,
+		Addr:         ":4000",
+		Handler:      r,
+		ErrorLog:     l,
+		ReadTimeout:  5 * time.Second,   // max time to read request from the client
+		WriteTimeout: 10 * time.Second,  // max time to write response to the client
+		IdleTimeout:  120 * time.Second, // max time for connections using TCP Keep-Alive
 	}
 
 	// Initializing the server in a goroutine so that
